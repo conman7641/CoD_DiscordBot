@@ -12,7 +12,7 @@ const Platform = require("call-of-duty-api")
 const Store = require("call-of-duty-api")
 const { EmbedBuilder } = require("discord.js")
 const {platforms} = require("call-of-duty-api");
-const token = "MTAyMTg5NTc3MjE1NDg5NjQzNg.G3Yu9k.Q48qymuVYGbTQsUfgPZO-KnM68FCHmFwfnKZ7s"
+const token = ""
 const client = new Discord.Client({
     intents: [
         "Guilds",
@@ -22,7 +22,7 @@ const client = new Discord.Client({
 
     ]
 })
-const codToken = 'MTU3MTY0ODM3ODE2NDY5NzU1Mzc6MTY2NTAzMDE4Nzk0ODpmNzFkY2MzZmE0ZTRmNjRjMjE1MWI3MWM2MTI2MzM5Zg'
+const codToken = ""
 const prefix = ".c ";
 
 const userID = "424736619266834432"
