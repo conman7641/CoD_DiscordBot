@@ -4,9 +4,8 @@ const Me = require("call-of-duty-api")
 const Discord = require("discord.js")
 const Platform = require("call-of-duty-api")
 const Store = require("call-of-duty-api")
-const { EmbedBuilder } = require("discord.js")
-const {platforms} = require("call-of-duty-api");
-const createEmbed = require("./createEmbed");
+const createEmbedMP = require("./createEmbed");
+const createEmbedWarzone = require("./createEmbed");
 const token = ""
 const client = new Discord.Client({
     intents: [
@@ -19,9 +18,6 @@ const client = new Discord.Client({
 })
 const codToken = ""
 const prefix = ".c ";
-
-const userID = "424736619266834432"
-const testID = '631345478637977611'
 
 client.on("ready", () => {
     console.log(`logged in as ${client.user.tag}`)
@@ -67,8 +63,8 @@ client.on("messageCreate", async (message) => {
     if (args.length !== 3) return;
 
     const game = args[0].toString()
-    const platform = args[2].toLowerCase()
     const gamertag = args[1].toString()
+    const platform = args[2].toLowerCase()
 
     if (game !== 'Warzone') return;
     if (platform !== 'psn' && platform !== 'xbl' && platform !== 'battle') return;
@@ -84,56 +80,8 @@ client.on("messageCreate", async (message) => {
         return;
     }
 
-    const embed = new Discord.EmbedBuilder()
-        .setTitle(`${gamertag}'s Warzone Stats`)
-        .setDescription(`Platform: ${platform}`)
-        .setColor(0x00AE86)
-        .setImage(client.user.displayAvatarURL())
-        .setThumbnail(client.user.displayAvatarURL())
-        .setTimestamp(Date.now())
-        .setURL(`https://www.youtube.com/user/conman7641`)
-        .addFields([
-            {
-                name: 'Kills',
-                value: data.data.lifetime.mode.br_all.properties.kills.toString(),
-                inline: true
-            },
-            {
-                name: 'Deaths',
-                value: data.data.lifetime.mode.br_all.properties.deaths.toString(),
-                inline: true
-            },
-            {
-                name: 'K/D',
-                value: data.data.lifetime.mode.br_all.properties.kdRatio.toFixed(2).toString(),
-                inline: true
-            },
-            {
-                name: 'Wins',
-                value: data.data.lifetime.mode.br_all.properties.wins.toString(),
-                inline: true
-            },
-            {
-                name: 'Top 5',
-                value: data.data.lifetime.mode.br_all.properties.topFive.toString(),
-                inline: true
-            },
-            {
-                name: 'Top 10',
-                value: data.data.lifetime.mode.br_all.properties.topTen.toString(),
-                inline: true
-            },
-            {
-                name: 'Games Played',
-                value: data.data.lifetime.mode.br_all.properties.gamesPlayed.toString(),
-                inline: true
-            },
-            {
-                name: 'Total Score',
-                value: data.data.lifetime.mode.br_all.properties.score.toString(),
-                inline: true
-            }]
-        );
+
+    const embed = createEmbedWarzone(data, gamertag, platform, message.author.displayAvatarURL())
     message.channel.send({ embeds: [embed] })
 
 })
@@ -170,6 +118,7 @@ client.on("messageCreate", async (message) => {
         await message.reply("User not found")
         return;
     }
+
     if (game === "ColdWar") {
         kdString = "kdratio"
     } else {
@@ -179,14 +128,11 @@ client.on("messageCreate", async (message) => {
     const kd = data.data.lifetime.all.properties[kdString].toFixed(2).toString()
     const kills = data.data.lifetime.all.properties.kills.toString()
     const deaths = data.data.lifetime.all.properties.deaths.toString()
-    const embed = createEmbed(gamertag, game, kd, kills, deaths, message.author)
+    const embed = createEmbedMP(gamertag, game, kd, kills, deaths, message.author.displayAvatarURL())
     message.channel.send({ embeds: [embed] })
 
 })
 
-
-
 ModernWarfare.login(codToken)
 
 client.login(token)
-
