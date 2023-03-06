@@ -1,10 +1,4 @@
 
-/*
-login(ssoToken: string);
-// or alternatively
-import API from "call-of-duty-api";
-API.login(ssoToken: string);
-*/
 const ModernWarfare = require("call-of-duty-api")
 const Me = require("call-of-duty-api")
 const Discord = require("discord.js")
@@ -12,6 +6,7 @@ const Platform = require("call-of-duty-api")
 const Store = require("call-of-duty-api")
 const { EmbedBuilder } = require("discord.js")
 const {platforms} = require("call-of-duty-api");
+const createEmbed = require("./createEmbed");
 const token = ""
 const client = new Discord.Client({
     intents: [
@@ -180,31 +175,11 @@ client.on("messageCreate", async (message) => {
     } else {
         kdString = "kdRatio"
     }
-    console.log(data.data)
-    const embed = new EmbedBuilder()
-        .setTitle(`Call of Duty ${game} Stats`)
-        .setDescription(`Here are ${gamertag} stats`)
-        .setColor(0x18e1ee)
-        .setImage(client.user.displayAvatarURL())
-        .setURL(`https://www.youtube.com/user/conman7641`)
-        .setTimestamp(Date.now())
-        .addFields([
-            {
-                name: 'kills',
-                value: data.data.lifetime.all.properties.kills.toString(),
-                inline: true
-            },
-            {
-                name: 'deaths',
-                value: data.data.lifetime.all.properties.deaths.toString(),
-                inline: true
-            },
-            {
-                name: 'kd',
-                value: data.data.lifetime.all.properties[kdString].toFixed(2).toString(),
-                inline: true
-            }]
-        );
+
+    const kd = data.data.lifetime.all.properties[kdString].toFixed(2).toString()
+    const kills = data.data.lifetime.all.properties.kills.toString()
+    const deaths = data.data.lifetime.all.properties.deaths.toString()
+    const embed = createEmbed(gamertag, game, kd, kills, deaths, message.author)
     message.channel.send({ embeds: [embed] })
 
 })
